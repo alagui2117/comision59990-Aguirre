@@ -10,8 +10,8 @@ header{
     display: flex;
     justify-content: space-between;
     align-items: center;    
-    padding: 0px 1.875rem;
-    background-color: aqua;
+    /*padding: 0px 1.875rem;
+    /*background-color: aqua;*/
     
     h1{
         font-size: 3.125rem;
@@ -25,4 +25,11 @@ header{
 }
 h2{
     text-align: center;
+}
+
+#navbar{
+    min-height: 6.25rem;
+}
+.price{
+    font-size: 1.25rem;
 }
