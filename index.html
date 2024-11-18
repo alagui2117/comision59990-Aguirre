@@ -17,10 +17,10 @@
               <div class="collapse navbar-collapse" id="navbarSupportedContent">
                 <ul class="navbar-nav me-auto mb-2 mb-lg-0">
                   <li class="nav-item">
-                    <a class="nav-link active" aria-current="page" href="#">Productos</a>
+                    <a class="nav-link active" id="productos-label" onclick="cambiarPagina(0)" aria-current="page" href="#">Productos</a>
                   </li>
                   <li class="nav-item">
-                    <a class="nav-link" href="#">Ordenes</a>
+                    <a class="nav-link" id="ordenes-label" onclick="cambiarPagina(1)"  href="#">Ordenes</a>
                   </li>
                 
                  
@@ -31,15 +31,23 @@
           </nav>
 
     </header>
-    <main class="container-fluid d-flex flex-wrap    ">
-        <h2 class="flex-grow-1 w-100">Inventario</h2>
+    <main class="container-fluid d-flex flex-wrap d-none" id="ordenes-box">
+      <h2 class="flex-grow-1 w-100">Ordenes</h2>
+        
+
+      <div  id="lista-ordenes" class="d-flex flex-wrap w-100 justify-content-around mt-5">
+      
+      </div>
+    </main>
+    <main class="container-fluid d-flex flex-wrap " id="productos-box">
+        <h2 class="flex-grow-1 w-100">Productos</h2>
         
 
         <div  id="lista-productos" class="d-flex w-75 justify-content-around mt-5">
         
         </div>
         <div id="lista-carrito" class="d-flex w-25 justify-content-around flex-column mt-5">
-            
+          
         </div>
 
     </main>

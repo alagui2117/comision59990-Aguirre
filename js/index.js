@@ -24,11 +24,12 @@ const PRODUCTOS = [
         precio: 22.50,
         cantidad: 8,
         imagen: "https://plus.unsplash.com/premium_photo-1705338026411-00639520a438?w=500&auto=format&fit=crop&q=60&ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxzZWFyY2h8MXx8YXJyb3p8ZW58MHx8MHx8fDA%3D"
-    },
+    }
 
 ];
 let CARRITO = []
 
+let ORDENES = []
 
 function main(){
   
@@ -105,6 +106,7 @@ function verCarrito(){
                     </div>
                     <div class="card-footer">
                               <p class="card-text price" >  $${producto.total} MXN </p>
+                              
                     </div>
                 </div>`
            
@@ -114,6 +116,7 @@ function verCarrito(){
         rows += `<div class="card w-100">
         <div class="card-body d-flex flex-wrap justify-content-end">
         <h5 class="card-title w-100">  Total: $${total} MXN</h5>
+        <button class="btn btn-outline-primary" onclick="ordenar()"><i class="bi bi-cart-check"></i>Ordenar</button>
         </div>
         </div>`
         listaDom.innerHTML = rows
@@ -122,29 +125,67 @@ function verCarrito(){
 }
 
 
-function productos(){
-
-
-    /*let operacion = prompt("ingresa la operacion\n"+
-         "1.- Ver productos\n"+
-         "2.- Insertar producto\n"+
-         "3.- Modificar producto"
-        );
-    switch(operacion){
-        case "1":
-            console.log("ingresaste a ver productos");
-            verProductos()
-            break;
-        case "2":
-            console.log("ingresaste a insertar producto")
-            introducirProductos()
-            break;
-        case "3":
-            console.log("ingresaste a resumen mensual")
-            modificarProducto();
-            break;
-    }*/
+function getOrdenes(){
+    return JSON.parse(localStorage.getItem("ordenes")) || []
 }
+
+function ordenar(){
+    const ORDENES = getOrdenes()
+    const orden = {
+        id: Math.round(Math.random() * 1000 ),
+        productos: CARRITO,
+        prioridad: designarPrioridad()
+        
+    }
+    console.log(orden)
+    ORDENES.push(orden)
+    CARRITO = []
+    localStorage.setItem("ordenes", JSON.stringify(ORDENES))
+    localStorage.removeItem("carrito")
+    cambiarPagina(1)
+    
+
+
+}
+function designarPrioridad(){
+    const numRandom = Math.round(Math.random() * 10)
+    if(numRandom> 7){
+        return "ok"
+    }
+    if (numRandom >4 ){
+        return "warn"
+    }
+    if (numRandom >= 0){
+        return "danger"
+    }
+}
+
+function cambiarPagina(page){
+    const productosBox = document.getElementById("productos-box")
+    const ordenesBox = document.getElementById("ordenes-box")
+    const productosLabel = document.getElementById("productos-label")
+    const ordenesLabel = document.getElementById("ordenes-label")
+
+    if (page == 0) {
+        productosLabel.classList.add("active")
+        ordenesLabel.classList.remove("active")
+        productosBox.classList.remove("d-none")
+        ordenesBox.classList.add("d-none")
+        main()
+        return
+    }
+    if (page==1){
+        productosLabel.classList.remove("active")
+        ordenesLabel.classList.add("active")
+        productosBox.classList.add("d-none")
+        ordenesBox.classList.remove("d-none")
+        ordenes()
+        return
+    }
+    
+
+}
+
 
 function verProductos(){
     //alert(PRODUCTOS)
@@ -239,70 +280,65 @@ function introducirProductos() {
 
 }
 
-/*let costoTotal = productos.reduce((sum, prod) => sum + prod.costoTotal, 0);
 
-console.log("Productos introducidos:");
-productos.forEach(prod => {
-    console.log(`Producto: ${prod.nombre}, Cantidad: ${prod.cantidad}, Costo por unidad: ${prod.costoUnidad}, Costo total del producto: ${prod.costoTotal}`);
-});
-console.log(`Costo total de todos los productos: ${costoTotal}`);*/
-
-
-
-//introducirProductos();
-
-/*function verProducto(nombre) {
-    let producto = productos.find(prod => prod.nombre.toLowerCase() === nombre.toLowerCase());
-    if (producto) {
-        console.log(`Producto: ${producto.nombre}, Cantidad: ${producto.cantidad}, Costo por unidad: ${producto.costoUnidad}, Costo total del producto: ${producto.costoTotal}`);
-    } else {
-        console.log("Producto no encontrado");
-    }
-
-
-let costoTotal = productos.reduce((sum, prod) => sum + prod.costoTotal, 0);
-
-console.log("Productos introducidos:");
-productos.forEach(prod => {
-    console.log(`Producto: ${prod.nombre}, Cantidad: ${prod.cantidad}, Costo por unidad: ${prod.costoUnidad}, Costo total del producto: ${prod.costoTotal}`);
-});
-
-
-console.log(`Costo total de todos los productos: ${costoTotal}`);
-
-// Pedir al usuario el producto que quiere ver
-let productoBuscar = prompt("Introduce el nombre del producto que quieres ver:");
-verProducto(productoBuscar);
+function ordenes(){
+    verOrdenes()
 }
 
+function verOrdenes(){
+
+    ORDENES = getOrdenes()
+    const listaOrdenes = document.getElementById("lista-ordenes")
 
 
-introducirProductos();
-*/
+
+    let cards=""
+    ORDENES.forEach((orden, index) =>  {
+        let productos = ""
+        let total = 0.0
+        orden.productos.forEach(producto => {
+            total += producto.total 
+            productos += `<li class="list-group-item d-flex justify-content-between align-items-start w-100">
+                            <div class="ms-2 me-auto">
+                            <div class="fw-bold">${producto.nombre}</div>
+                                <h6>Cantidad: ${producto.cantidad}</h6>
+                            </div>
+                            <span class="badge text-bg-primary rounded-pill">$ ${producto.total}</span>
+                        </li>`
+        })
 
 
-/*let rubro = prompt("ingresa el rubro");
-    if (rubro == "abarrotes"){
-        console.log("ingresaste el rubro " + rubro)
-    }
 
         
-    else{
-        if (rubro == "pan"){
-            console.log("ingresaste el rubro " + rubro)
-        }
-        else{
-            if (rubro == "carnes"){
-                console.log("ingresaste el rubro " + rubro)
-            }
-            else{
-                prompt("ingresa un rubro correcto")
-            }
-        }
+        cards += `<div class="card mb-5 mr-2 ${getClassPrioridad(orden.prioridad)} " style="width: 18rem; flex-basis:30%">
+                    <div class="card-body d-flex flex-wrap justify-content-end">
+                    <h5 class="card-title w-100"># ${orden.id}</h5>
+                    <ul class="list-group">
+                    </ul>
+                    ${productos}
+                    </div>
+                    <div class="card-footer d-flex justify-content-end">
+                        Total: $${total} MXN
+                    </div>
+                </div>`
 
+    })
+    listaOrdenes.innerHTML =cards
+}
 
+function getClassPrioridad(prioridad){
+
+    switch(prioridad){
+        case "warn":
+            return "border border-warning"
+        case "ok":
+            return "border border-primary"
+        case "danger":
+            return "border border-danger"    
     }
-*/
+
+}
+
 
 
     
